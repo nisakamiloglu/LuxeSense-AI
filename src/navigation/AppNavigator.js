@@ -5,7 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
 
 // Auth Screens
+import LandingScreen from '../screens/LandingScreen';
 import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 import SplashScreen from '../screens/SplashScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 
@@ -143,10 +145,12 @@ const AppNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="Login"
+      initialRouteName="Landing"
     >
       {/* Auth Flow */}
+      <Stack.Screen name="Landing" component={LandingScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
 
       {/* Customer Flow */}
       <Stack.Screen name="Splash" component={SplashScreen} />
