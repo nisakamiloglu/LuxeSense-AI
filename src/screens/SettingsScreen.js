@@ -9,24 +9,18 @@ import {
   Alert,
   Modal,
 } from 'react-native';
-<<<<<<< HEAD
-=======
-import AsyncStorage from '@react-native-async-storage/async-storage';
->>>>>>> d1353da (Initial commit)
+
+
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES, SHADOWS } from '../constants/theme';
 import { useApp } from '../context/AppContext';
 import { useToast } from '../context/ToastContext';
 
-<<<<<<< HEAD
-const SettingsScreen = ({ navigation }) => {
-  const { user, token, logout } = useApp();
-=======
 const API_URL = 'https://luxesense-backend-production.up.railway.app/api';
 
 const SettingsScreen = ({ navigation }) => {
   const { user, token, logout, setUser } = useApp();
->>>>>>> d1353da (Initial commit)
+
   const { showSuccess, showError, showWarning, showInfo } = useToast();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
@@ -43,45 +37,29 @@ const SettingsScreen = ({ navigation }) => {
   const [editPhone, setEditPhone] = useState(user.phone || '');
 
   const handleChangePassword = async () => {
-<<<<<<< HEAD
+
     if (!currentPassword || !newPassword || !confirmPassword) {
       showWarning('Missing Information', 'Please fill all fields');
-=======
-    console.log('burda');
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      showWarning('Missing Information', 'Please fill all fields');
-      console.log('uyanloş');
->>>>>>> d1353da (Initial commit)
+
       return;
     }
     if (newPassword.length < 4) {
       showWarning('Weak Password', 'Password must be at least 4 characters');
-<<<<<<< HEAD
-=======
-      console.log('uyanloş2');
->>>>>>> d1353da (Initial commit)
+
+
       return;
     }
     if (newPassword !== confirmPassword) {
       showError('Mismatch', 'Passwords do not match');
-<<<<<<< HEAD
-=======
-      console.log('uyanloş3');
->>>>>>> d1353da (Initial commit)
+
+
       return;
     }
 
     try {
-<<<<<<< HEAD
-      const response = await fetch('http://10.34.40.171:5001/api/auth/change-password', {
-=======
-      console.log('Change password - Token:', token ? 'present' : 'missing');
-      console.log('Change password - Current password length:', currentPassword.length);
-      console.log('Change password - New password length:', newPassword.length);
-      
-      console.log('Sending password change request with token:', token);
+
       const response = await fetch(`${API_URL}/auth/change-password`, {
->>>>>>> d1353da (Initial commit)
+
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -92,42 +70,23 @@ const SettingsScreen = ({ navigation }) => {
           newPassword,
         }),
       });
-<<<<<<< HEAD
+
       const data = await response.json();
 
       if (data.success) {
-=======
-      
-      console.log('Password change response status:', response.status);
-      
-      console.log('Change password - Response status:', response.status);
-      const data = await response.json();
-      console.log('Change password - Response data:', data);
 
-      console.log('Password change response data:', data);
-      
-      if (data.success) {
-        console.log('Showing success toast');
->>>>>>> d1353da (Initial commit)
         showSuccess('Password Updated', 'Your password has been changed');
         setShowChangePassword(false);
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
       } else {
-<<<<<<< HEAD
+
         showError('Failed', data.message || 'Could not change password');
       }
     } catch (error) {
       showError('Connection Error', 'Please check your internet');
-=======
-        console.log('Showing error toast');
-        showError('Failed', data.message || 'Could not change password');
-      }
-    } catch (error) {
-      console.error('Change password error:', error);
-      showError('Connection Error', error.message || 'Please check your internet');
->>>>>>> d1353da (Initial commit)
+
     }
   };
 
@@ -138,11 +97,9 @@ const SettingsScreen = ({ navigation }) => {
     }
 
     try {
-<<<<<<< HEAD
-      const response = await fetch('http://10.34.40.171:5001/api/auth/update-profile', {
-=======
+
       const response = await fetch(`${API_URL}/auth/update-profile`, {
->>>>>>> d1353da (Initial commit)
+
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -154,43 +111,18 @@ const SettingsScreen = ({ navigation }) => {
         }),
       });
       const data = await response.json();
-<<<<<<< HEAD
+
 
       if (data.success) {
-=======
-      console.log(data);
-
-      if (data.success) {
-        // Update both name and fullName to show in the UI
-        const updatedUser = {
-          ...user,
-          name: editName,
-          fullName: editName,
-          phone: editPhone
-        };
-        setUser(updatedUser);
-        
-        // Save the updated user state to AsyncStorage
-        const savedAuth = {
-          savedToken: token,
-          savedUserType: 'customer',
-          savedUser: updatedUser
-        };
-        AsyncStorage.setItem('authState', JSON.stringify(savedAuth));
-        
->>>>>>> d1353da (Initial commit)
+        setUser({ ...user, name: editName, fullName: editName, phone: editPhone });
         showSuccess('Profile Updated', 'Your changes have been saved');
         setShowEditProfile(false);
       } else {
         showError('Failed', data.message || 'Could not update profile');
       }
     } catch (error) {
-<<<<<<< HEAD
       showError('Connection Error', 'Please check your internet');
-=======
-      console.error('Update profile error:', error);
-      showError('Connection Error', error.message || 'Please check your internet');
->>>>>>> d1353da (Initial commit)
+
     }
   };
 
