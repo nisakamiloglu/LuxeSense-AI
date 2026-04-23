@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npm install *)",
+      "Bash(ipconfig getifaddr *)",
+      "Bash(npx expo *)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(jobs -l)",
+      "Bash(grep -E \"\\\\.\\(js|jsx|ts|tsx\\)$\")"
+    ]
+  }
+}

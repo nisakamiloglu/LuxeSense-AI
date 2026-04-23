@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "expo",
+      "runtimeExecutable": "/Users/alikamiloglu/Desktop/LuxeSense-AI-main/node_modules/.bin/expo",
+      "runtimeArgs": ["start", "--port", "8081"],
+      "port": 8081
+    }
+  ]
+}
