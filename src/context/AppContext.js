@@ -481,6 +481,10 @@ export const AppProvider = ({ children }) => {
 
   // Auth functions
   const login = (type, userData = null, authToken = null, newUser = false) => {
+    // Clear previous user's data
+    setCartItems([]);
+    setWishlist([]);
+    setOrders([]);
     setIsLoggedIn(true);
     setUserType(type);
     setIsNewUser(newUser);
@@ -543,6 +547,9 @@ export const AppProvider = ({ children }) => {
     setCviSegment('low_priority');
     pendingEventsRef.current = [];
     clearAuthState();
+    setCartItems([]);
+    setWishlist([]);
+    setOrders([]);
     setAiStylistMessages([]);
     setSaChatMessages([]);
   };
@@ -671,6 +678,10 @@ export const AppProvider = ({ children }) => {
     return newOrder;
   };
 
+  const completeStyleQuiz = async (score, profile, notifPref) => {
+    setUser(prev => ({ ...prev, styleProfile: profile, styleScore: score }));
+  };
+
   return (
     <AppContext.Provider value={{
       // Products
@@ -758,6 +769,9 @@ export const AppProvider = ({ children }) => {
 
       // Notifications
       initNotifications,
+
+      // Style Quiz
+      completeStyleQuiz,
     }}>
       {children}
     </AppContext.Provider>
