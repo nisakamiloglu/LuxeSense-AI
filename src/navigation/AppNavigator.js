@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
 import { useApp } from '../context/AppContext';
@@ -38,7 +38,7 @@ import AdvisorChatScreen from '../screens/AdvisorChatScreen';
 import ActivityScreen from '../screens/ActivityScreen';
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 // Customer Tab Navigator
 const CustomerTabs = () => {
@@ -170,6 +170,8 @@ const AppNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        animation: 'fade_from_bottom',
+        animationDuration: 250,
       }}
       initialRouteName={getInitialRoute()}
     >
