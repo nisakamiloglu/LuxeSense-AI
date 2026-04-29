@@ -148,3 +148,23 @@ export const removeFromWishlistAPI = async (productId, token) => {
   });
   return res.json();
 };
+
+// ── Chat ──────────────────────────────────────
+export const getConversations = async (token) => {
+  const res = await fetch(`${API_URL}/chat/conversations`, { headers: jsonHeaders(token) });
+  return res.json();
+};
+
+export const getChatMessages = async (partnerId, token) => {
+  const res = await fetch(`${API_URL}/chat/${partnerId}`, { headers: jsonHeaders(token) });
+  return res.json();
+};
+
+export const sendChatMessage = async (partnerId, text, token) => {
+  const res = await fetch(`${API_URL}/chat`, {
+    method: 'POST',
+    headers: jsonHeaders(token),
+    body: JSON.stringify({ partnerId, text }),
+  });
+  return res.json();
+};

@@ -10,7 +10,14 @@ import {
   scheduleLocalNotification,
   CUSTOMER_NOTIFICATIONS,
 } from '../services/notificationService';
-import { getAdvisorCustomers, ingestLIRABatch } from '../services/api';
+import {
+  getAdvisorCustomers,
+  ingestLIRABatch,
+  createOrder,
+  addToWishlistAPI,
+  removeFromWishlistAPI,
+  getWishlist,
+} from '../services/api';
 
 // ── ES KPI scoring helpers ────────────────────────────────────────────────────
 function kpiTier(value, high, mid) {
@@ -490,9 +497,11 @@ export const AppProvider = ({ children }) => {
     setIsNewUser(newUser);
     if (authToken) setToken(authToken);
     initNotifications();
-    // Load real customers if advisor
     if (type === 'advisor' && authToken) {
       loadAdvisorCustomers(authToken);
+    }
+    if (type === 'customer' && authToken) {
+      loadWishlist(authToken);
     }
 
     const userInfo = {
@@ -505,7 +514,12 @@ export const AppProvider = ({ children }) => {
 
     if (userData) {
       if (type === 'customer') {
-        setUser(prev => ({ ...prev, ...userInfo }));
+        setUser(prev => ({
+          ...prev,
+          ...userInfo,
+          advisorId: userData.assignedAdvisorId || null,
+          advisorName: userData.advisorName || null,
+        }));
       } else {
         setAdvisor(prev => ({
           ...prev,
@@ -615,9 +629,20 @@ export const AppProvider = ({ children }) => {
   const toggleWishlist = (productId) => {
     if (wishlist.includes(productId)) {
       setWishlist(wishlist.filter(id => id !== productId));
+      if (token) removeFromWishlistAPI(productId, token).catch(() => {});
     } else {
       setWishlist([...wishlist, productId]);
+      if (token) addToWishlistAPI(productId, token).catch(() => {});
     }
+  };
+
+  const loadWishlist = async (authToken) => {
+    try {
+      const data = await getWishlist(authToken);
+      if (data?.success && Array.isArray(data.items)) {
+        setWishlist(data.items.map(i => i.productId));
+      }
+    } catch {}
   };
 
   const isInWishlist = (productId) => {
@@ -635,7 +660,7 @@ export const AppProvider = ({ children }) => {
   };
 
   // Order functions
-  const placeOrder = (shippingInfo, shipping) => {
+  const placeOrder = async (shippingInfo, shipping) => {
     const orderNumber = `LX${Date.now().toString().slice(-8)}`;
     const subtotal = getCartTotal();
     const tax = Math.round(subtotal * 0.08);
@@ -653,6 +678,11 @@ export const AppProvider = ({ children }) => {
       date: new Date().toISOString(),
     };
     setOrders([newOrder, ...orders]);
+
+    // Persist to backend (fire-and-forget — local state is source of truth for UI)
+    if (token) {
+      createOrder({ items: cartItems, total, shippingInfo, shipping }, token).catch(() => {});
+    }
 
     // Track purchase timestamp for rolling 30-day PF window
     const now = Date.now();

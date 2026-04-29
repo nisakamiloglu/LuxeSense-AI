@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { COLORS, SIZES, SHADOWS } from '../constants/theme';
 import { useApp } from '../context/AppContext';
 import { getSAResponse } from '../services/groqService';
+import { sendChatMessage, getChatMessages } from '../services/api';
 import { products } from '../constants/mockData';
 
 const ChatScreen = ({ route, navigation }) => {
@@ -26,7 +27,7 @@ const ChatScreen = ({ route, navigation }) => {
     fullName: 'Isabelle Moreau',
     role: 'Senior Sales Advisor',
   };
-  const { user, saChatMessages, setSaChatMessages, language } = useApp();
+  const { user, token, saChatMessages, setSaChatMessages, language } = useApp();
   const { t } = useTranslation();
   const scrollViewRef = useRef();
   const [message, setMessage] = useState('');
@@ -274,6 +275,11 @@ const ChatScreen = ({ route, navigation }) => {
     const userText = message.trim();
     setMessage('');
     setIsTyping(true);
+
+    // Persist to backend if advisor is linked
+    if (token && user.advisorId) {
+      sendChatMessage(user.advisorId, userText, token).catch(() => {});
+    }
 
     try {
       // First check if local response has products

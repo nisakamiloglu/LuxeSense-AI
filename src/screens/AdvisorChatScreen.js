@@ -11,33 +11,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES, SHADOWS } from '../constants/theme';
-
-// Mock messages data
-const mockMessages = {
-  1: [
-    { id: 1, text: 'Hi! Is the Birkin 25 in Gold available?', sender: 'customer', time: '2:30 PM' },
-    { id: 2, text: 'Yes, we have it in stock! Would you like me to reserve it for you?', sender: 'advisor', time: '2:32 PM' },
-    { id: 3, text: 'That would be perfect, thank you!', sender: 'customer', time: '2:35 PM' },
-  ],
-  2: [
-    { id: 1, text: 'I need something special for the Met Gala', sender: 'customer', time: '10:00 AM' },
-    { id: 2, text: 'I have the perfect Cartier pieces in mind! Can we schedule a viewing?', sender: 'advisor', time: '10:05 AM' },
-    { id: 3, text: 'Yes, tomorrow at 3pm works for me', sender: 'customer', time: '10:10 AM' },
-    { id: 4, text: "Perfect! I'll prepare a selection for you", sender: 'advisor', time: '10:12 AM' },
-  ],
-  3: [
-    { id: 1, text: 'When will the new Rolex collection arrive?', sender: 'customer', time: '11:00 AM' },
-    { id: 2, text: "We expect them next week. I'll notify you immediately!", sender: 'advisor', time: '11:05 AM' },
-  ],
-  4: [
-    { id: 1, text: 'Do you have the Dior Book Tote in blue?', sender: 'customer', time: '2:00 PM' },
-    { id: 2, text: 'Yes! We have the Blue Oblique. Would you like to see it?', sender: 'advisor', time: '2:05 PM' },
-  ],
-  5: [
-    { id: 1, text: 'Thanks for helping me find the Submariner!', sender: 'customer', time: '3:00 PM' },
-    { id: 2, text: 'My pleasure! Let me know if you need anything else.', sender: 'advisor', time: '3:05 PM' },
-  ],
-};
+import { useApp } from '../context/AppContext';
+import { getChatMessages, sendChatMessage } from '../services/api';
 
 const quickReplies = [
   "I'll check availability for you",
@@ -48,29 +23,48 @@ const quickReplies = [
 
 const AdvisorChatScreen = ({ navigation, route }) => {
   const { customer, conversationId } = route.params;
-  const [messages, setMessages] = useState(mockMessages[conversationId] || []);
+  const { token } = useApp();
+  const partnerId = customer?._id || customer?.id || null;
+  const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const flatListRef = useRef(null);
 
   useEffect(() => {
-    // Scroll to bottom on load
-    setTimeout(() => {
-      flatListRef.current?.scrollToEnd({ animated: false });
-    }, 100);
+    const load = async () => {
+      if (token && partnerId) {
+        try {
+          const data = await getChatMessages(partnerId, token);
+          if (data?.success && data.messages?.length > 0) {
+            setMessages(data.messages.map(m => ({
+              id: m._id,
+              text: m.text,
+              sender: m.senderRole,
+              time: new Date(m.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
+            })));
+          }
+        } catch {}
+      }
+      setTimeout(() => flatListRef.current?.scrollToEnd({ animated: false }), 100);
+    };
+    load();
   }, []);
 
-  const sendMessage = (text) => {
+  const sendMessage = async (text) => {
     if (!text.trim()) return;
 
     const newMessage = {
-      id: messages.length + 1,
+      id: Date.now().toString(),
       text: text.trim(),
       sender: 'advisor',
       time: new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
     };
 
-    setMessages([...messages, newMessage]);
+    setMessages(prev => [...prev, newMessage]);
     setInputText('');
+
+    if (token && partnerId) {
+      sendChatMessage(partnerId, text.trim(), token).catch(() => {});
+    }
 
     setTimeout(() => {
       flatListRef.current?.scrollToEnd({ animated: true });

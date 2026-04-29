@@ -37,7 +37,7 @@ exports.login = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Please provide email and password' });
     }
 
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select('+password').populate('assignedAdvisorId', '_id name email');
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
@@ -47,7 +47,14 @@ exports.login = async (req, res, next) => {
     res.json({
       success: true,
       token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role }
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        assignedAdvisorId: user.assignedAdvisorId?._id || null,
+        advisorName: user.assignedAdvisorId?.name || null,
+      },
     });
   } catch (error) {
     next(error);
