@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
 import { useApp } from '../context/AppContext';
@@ -38,7 +38,7 @@ import AdvisorChatScreen from '../screens/AdvisorChatScreen';
 import ActivityScreen from '../screens/ActivityScreen';
 
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 // Customer Tab Navigator
 const CustomerTabs = () => {
@@ -170,8 +170,11 @@ const AppNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        animation: 'slide_from_right',
-        animationDuration: 250,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        transitionSpec: {
+          open: { animation: 'timing', config: { duration: 400 } },
+          close: { animation: 'timing', config: { duration: 350 } },
+        },
       }}
       initialRouteName={getInitialRoute()}
     >
