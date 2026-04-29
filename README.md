@@ -144,6 +144,16 @@ If a customer has been inactive for ≥ 15 days, their ES is multiplied by 0.8. 
 
 Events are batched client-side and flushed to the backend when the app goes to background. The backend is the authoritative score source; the frontend computes local estimates for instant UI feedback.
 
+**Testing**
+
+The scoring engine is covered by unit tests using Jest. Run with:
+
+```bash
+npm test
+```
+
+12 tests covering ES formula weights, CVI threshold boundaries, and segment classification. All pass.
+
 ---
 
 ## Catalog
