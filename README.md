@@ -129,9 +129,9 @@ Rolling 30-day purchase window:
 ```
 CVI = ES + PF
 
-≥ 7.0  →  high_priority
-≥ 4.0  →  follow_up
-< 4.0  →  low_priority
+≥ 8.0  →  high_priority
+≥ 5.0  →  follow_up
+< 5.0  →  low_priority
 ```
 
 **Decay**
@@ -203,7 +203,11 @@ npx expo start
 
 Scan the QR code with Expo Go.
 
-### Backend (optional — app works with mock data fallback)
+### Backend
+
+The backend is deployed at `https://luxesense-backend.onrender.com` and connects to MongoDB Atlas. The mobile app points to this instance by default — no local setup needed to run the full experience.
+
+To run locally:
 
 ```bash
 cd backend
