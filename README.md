@@ -8,11 +8,34 @@ A full-stack luxury retail mobile application that connects high-end customers w
 
 ## Screenshots
 
-<img src="assets/Screenshots/splash.png" width="180"> <img src="assets/Screenshots/login.png" width="180"> <img src="assets/Screenshots/homepage.png" width="180"> <img src="assets/Screenshots/homepage2.png" width="180">
+### Customer Experience
 
-<img src="assets/Screenshots/shop.png" width="180"> <img src="assets/Screenshots/brand.png" width="180"> <img src="assets/Screenshots/wishlist.png" width="180"> <img src="assets/Screenshots/men.png" width="180">
+<table>
+  <tr>
+    <td align="center"><img src="assets/Screenshots/splash.png" width="160"/><br/><sub>Splash</sub></td>
+    <td align="center"><img src="assets/Screenshots/login.png" width="160"/><br/><sub>Login</sub></td>
+    <td align="center"><img src="assets/Screenshots/homepage.png" width="160"/><br/><sub>Home Feed</sub></td>
+    <td align="center"><img src="assets/Screenshots/homepage2.png" width="160"/><br/><sub>Personalized Feed</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/Screenshots/shop.png" width="160"/><br/><sub>Catalog</sub></td>
+    <td align="center"><img src="assets/Screenshots/brand.png" width="160"/><br/><sub>Brand View</sub></td>
+    <td align="center"><img src="assets/Screenshots/wishlist.png" width="160"/><br/><sub>Wishlist</sub></td>
+    <td align="center"><img src="assets/Screenshots/men.png" width="160"/><br/><sub>Men's Collection</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/Screenshots/chat.png" width="160"/><br/><sub>AI Stylist Chat</sub></td>
+    <td align="center"><img src="assets/Screenshots/notification.png" width="160"/><br/><sub>Notifications</sub></td>
+  </tr>
+</table>
 
-<img src="assets/Screenshots/chat.png" width="180"> <img src="assets/Screenshots/notification.png" width="180"> <img src="assets/Screenshots/dashboard.png" width="180">
+### Advisor Dashboard
+
+<table>
+  <tr>
+    <td align="center"><img src="assets/Screenshots/dashboard.png" width="160"/><br/><sub>Advisor Dashboard</sub></td>
+  </tr>
+</table>
 
 ---
 
