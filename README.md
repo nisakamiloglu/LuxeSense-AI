@@ -6,6 +6,16 @@ A full-stack luxury retail mobile application that connects high-end customers w
 
 ---
 
+## Screenshots
+
+<img src="assets/Screenshots/splash.png" width="180"> <img src="assets/Screenshots/login.png" width="180"> <img src="assets/Screenshots/homepage.png" width="180"> <img src="assets/Screenshots/homepage2.png" width="180">
+
+<img src="assets/Screenshots/shop.png" width="180"> <img src="assets/Screenshots/brand.png" width="180"> <img src="assets/Screenshots/wishlist.png" width="180"> <img src="assets/Screenshots/men.png" width="180">
+
+<img src="assets/Screenshots/chat.png" width="180"> <img src="assets/Screenshots/notification.png" width="180"> <img src="assets/Screenshots/dashboard.png" width="180">
+
+---
+
 ## Overview
 
 LuxeSense AI simulates the digital experience of a luxury boutique. Customers browse curated collections from 8 top-tier brands, take a style quiz for personalized recommendations, chat with an AI stylist, and message their dedicated sales advisor. Advisors get a live dashboard showing each client's behavioral score, purchase frequency, and AI-generated outreach templates.
