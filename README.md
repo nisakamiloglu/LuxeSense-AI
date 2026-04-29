@@ -36,6 +36,10 @@ A full-stack luxury retail mobile application that connects high-end customers w
   <tr>
     <td align="center"><img src="assets/Screenshots/dashboard.png" width="160"/><br/><sub>Advisor Dashboard</sub></td>
     <td align="center"><img src="assets/Screenshots/clients.png" width="160"/><br/><sub>Client Portfolio (LIRA Scores)</sub></td>
+    <td align="center"><img src="assets/Screenshots/clientdetail.PNG" width="160"/><br/><sub>Client Detail</sub></td>
+    <td align="center"><img src="assets/Screenshots/clientdetail2.PNG" width="160"/><br/><sub>Client Insights</sub></td>
+  </tr>
+  <tr>
     <td align="center"><img src="assets/Screenshots/action.png" width="160"/><br/><sub>Activity & Tasks</sub></td>
     <td align="center"><img src="assets/Screenshots/message.png" width="160"/><br/><sub>Messages</sub></td>
   </tr>
