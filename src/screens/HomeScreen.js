@@ -210,7 +210,7 @@ const HomeScreen = ({ navigation }) => {
                   <TouchableOpacity
                     key={b.id}
                     style={styles.brandCard}
-                    onPress={() => navigation.navigate('BrandCatalog', { selectedBrand: b.id })}
+                    onPress={() => navigation.navigate('Shop', { selectedBrand: b.id, fromHome: true })}
                   >
                     <Image
                       source={typeof b.image === 'string' ? { uri: b.image } : b.image}
