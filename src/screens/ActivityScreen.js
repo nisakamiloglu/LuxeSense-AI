@@ -44,8 +44,14 @@ const ActivityScreen = ({ navigation }) => {
     });
   };
 
-  // Schedule
-  const dates = ['Today', 'Tomorrow', 'Mar 6', 'Mar 7', 'Mar 8'];
+  // Schedule — generate next 5 days dynamically
+  const dates = Array.from({ length: 5 }, (_, i) => {
+    if (i === 0) return 'Today';
+    if (i === 1) return 'Tomorrow';
+    const d = new Date();
+    d.setDate(d.getDate() + i);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  });
   const appointments = advisorAppointments.filter(a => a.date === selectedDate);
 
   const urgentCount = grouped.high.length;

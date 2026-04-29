@@ -9,6 +9,7 @@ const orderRoutes = require('./routes/order.routes');
 const wishlistRoutes = require('./routes/wishlist.routes');
 const liraRoutes = require('./routes/lira.routes');
 const chatRoutes = require('./routes/chat.routes');
+const advisorRoutes = require('./routes/advisor.routes');
 const { startDecayJob } = require('./services/DecayJob');
 const { getBrands, getCategories } = require('./controllers/product.controller');
 const errorHandler = require('./middleware/errorHandler');
@@ -29,6 +30,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/lira', liraRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/advisor', advisorRoutes);
 
 startDecayJob();
 app.get('/api/brands', getBrands);

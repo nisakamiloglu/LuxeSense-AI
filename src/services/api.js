@@ -160,6 +160,12 @@ export const getChatMessages = async (partnerId, token) => {
   return res.json();
 };
 
+// ── Advisor ───────────────────────────────────
+export const getAdvisorPerformance = async (token) => {
+  const res = await fetch(`${API_URL}/advisor/performance`, { headers: jsonHeaders(token) });
+  return res.json();
+};
+
 export const sendChatMessage = async (partnerId, text, token) => {
   const res = await fetch(`${API_URL}/chat`, {
     method: 'POST',

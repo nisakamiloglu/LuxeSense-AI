@@ -20,6 +20,14 @@ const TYPE_ICON = {
   tip:     { name: 'bulb-outline',         color: COLORS.gold },
 };
 
+const timeAgo = (date) => {
+  const seconds = Math.floor((new Date() - date) / 1000);
+  if (seconds < 60) return 'just now';
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+  return `${Math.floor(seconds / 86400)}d ago`;
+};
+
 const NotificationsScreen = ({ navigation }) => {
   const { wishlist, products, recentlyViewed } = useApp();
 
@@ -27,6 +35,8 @@ const NotificationsScreen = ({ navigation }) => {
 
   const buildNotifications = () => {
     const list = [];
+    const now = new Date();
+    const ago = (minutes) => new Date(now - minutes * 60 * 1000);
 
     // Stock alerts for wishlist items
     wishlistProducts.slice(0, 2).forEach((p, i) => {
@@ -37,7 +47,7 @@ const NotificationsScreen = ({ navigation }) => {
         body: `${p.brand} ${p.name} — only a few left. Don't miss out.`,
         cta: 'View Item',
         product: p,
-        time: `${i + 1}m ago`,
+        time: timeAgo(ago((i + 1) * 2)),
       });
     });
 
@@ -55,7 +65,7 @@ const NotificationsScreen = ({ navigation }) => {
         body: `You browsed ${browsed.brand} ${browsed.name}. You might love: ${suggested.brand} ${suggested.name}.`,
         cta: 'Explore',
         product: suggested,
-        time: `${(i + 1) * 15}m ago`,
+        time: timeAgo(ago((i + 1) * 15)),
       });
     });
 
@@ -69,7 +79,7 @@ const NotificationsScreen = ({ navigation }) => {
         body: `${p.brand} ${p.name} is now on sale. Save ${Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)}%.`,
         cta: 'Shop Now',
         product: p,
-        time: `${i + 1}h ago`,
+        time: timeAgo(ago((i + 1) * 60)),
       });
     });
 
@@ -82,7 +92,7 @@ const NotificationsScreen = ({ navigation }) => {
         body: `${p.brand} just dropped a new piece: ${p.name}. Be the first to explore.`,
         cta: 'See It',
         product: p,
-        time: `${i + 2}h ago`,
+        time: timeAgo(ago((i + 2) * 60)),
       });
     });
 
@@ -94,7 +104,7 @@ const NotificationsScreen = ({ navigation }) => {
       body: 'Complete your look — your AI Stylist has curated a full outfit based on your wishlist.',
       cta: 'Open AI Stylist',
       product: null,
-      time: '3h ago',
+      time: timeAgo(ago(180)),
     });
 
     list.push({
@@ -104,7 +114,7 @@ const NotificationsScreen = ({ navigation }) => {
       body: 'Pair a structured blazer with wide-leg trousers for an effortlessly polished look this season.',
       cta: 'Discover',
       product: null,
-      time: '5h ago',
+      time: timeAgo(ago(300)),
     });
 
     // Order update
@@ -115,7 +125,7 @@ const NotificationsScreen = ({ navigation }) => {
       body: 'Your recent order has been confirmed and is being prepared for shipment.',
       cta: 'Track Order',
       product: null,
-      time: '1d ago',
+      time: timeAgo(ago(1440)),
     });
 
     return list;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,23 +8,55 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES } from '../constants/theme';
-import {
-  performanceMetrics,
-  salesByCategory,
-  achievements,
-  weeklyTrend,
-} from '../constants/mockData';
+import { useApp } from '../context/AppContext';
+import { getAdvisorPerformance } from '../services/api';
 import Header from '../components/Header';
 import Card from '../components/Card';
 
+const MOCK_METRICS = {
+  currentSales: '$0',
+  monthlyTarget: '$500,000',
+  percentComplete: 0,
+  daysRemaining: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate() - new Date().getDate(),
+  averageTicket: '$0',
+  totalClients: 0,
+  repeatClients: 0,
+};
+const MOCK_WEEKLY = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => ({ day: d, sales: 0 }));
+const MOCK_CATEGORIES = [{ category: 'No data yet', amount: '$0', percentage: 100 }];
+const MOCK_ACHIEVEMENTS = [
+  { id: 1, title: 'First Sale', description: 'Complete your first sale', icon: 'trophy', earned: false },
+  { id: 2, title: 'Top Performer', description: 'Reach 80% of monthly target', icon: 'star', earned: false },
+  { id: 3, title: 'Client Champion', description: 'Serve 10+ unique clients', icon: 'award', earned: false },
+];
+
 const PerformanceDashboard = () => {
-  const maxSales = Math.max(...weeklyTrend.map(d => d.sales));
+  const { token } = useApp();
+  const [performanceMetrics, setPerformanceMetrics] = useState(MOCK_METRICS);
+  const [weeklyTrend, setWeeklyTrend] = useState(MOCK_WEEKLY);
+  const [salesByCategory, setSalesByCategory] = useState(MOCK_CATEGORIES);
+  const [achievements] = useState(MOCK_ACHIEVEMENTS);
+
+  useEffect(() => {
+    if (!token) return;
+    getAdvisorPerformance(token)
+      .then(data => {
+        if (data?.success) {
+          setPerformanceMetrics(data.performanceMetrics);
+          setWeeklyTrend(data.weeklyTrend);
+          if (data.salesByCategory?.length > 0) setSalesByCategory(data.salesByCategory);
+        }
+      })
+      .catch(() => {});
+  }, [token]);
+
+  const maxSales = Math.max(...weeklyTrend.map(d => d.sales), 1);
 
   return (
     <View style={styles.container}>
       <Header
         title="Performance"
-        subtitle="March 2024"
+        subtitle={new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
         rightIcon="download-outline"
       />
 
@@ -57,7 +89,9 @@ const PerformanceDashboard = () => {
           <View style={styles.targetMeta}>
             <Text style={styles.percentText}>{performanceMetrics.percentComplete}% Complete</Text>
             <Text style={styles.remainingText}>
-              ${(500000 - 387500).toLocaleString()} to go
+              {performanceMetrics.percentComplete < 100
+                ? `$${(500000 - parseInt((performanceMetrics.currentSales || '$0').replace(/[$,]/g, ''))).toLocaleString()} to go`
+                : 'Target reached! 🎯'}
             </Text>
           </View>
         </Card>
