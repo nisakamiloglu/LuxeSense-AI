@@ -1,10 +1,26 @@
-import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { View, ActivityIndicator, Animated } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
+import { useIsFocused } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
 import { useApp } from '../context/AppContext';
+
+const FadeScreen = ({ children }) => {
+  const isFocused = useIsFocused();
+  const opacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(opacity, {
+      toValue: isFocused ? 1 : 0,
+      duration: 220,
+      useNativeDriver: true,
+    }).start();
+  }, [isFocused]);
+
+  return <Animated.View style={{ flex: 1, opacity }}>{children}</Animated.View>;
+};
 
 // Auth Screens
 import LandingScreen from '../screens/LandingScreen';
@@ -85,10 +101,10 @@ const CustomerTabs = () => {
         },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Shop" component={CatalogScreen} />
-      <Tab.Screen name="Wishlist" component={WishlistScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Home" children={() => <FadeScreen><HomeScreen /></FadeScreen>} />
+      <Tab.Screen name="Shop" children={() => <FadeScreen><CatalogScreen /></FadeScreen>} />
+      <Tab.Screen name="Wishlist" children={() => <FadeScreen><WishlistScreen /></FadeScreen>} />
+      <Tab.Screen name="Profile" children={() => <FadeScreen><ProfileScreen /></FadeScreen>} />
     </Tab.Navigator>
   );
 };
@@ -138,10 +154,10 @@ const AdvisorTabs = () => {
         },
       })}
     >
-      <Tab.Screen name="Dashboard" component={AdvisorDashboardScreen} />
-      <Tab.Screen name="Clients" component={CustomersScreen} />
-      <Tab.Screen name="Activity" component={ActivityScreen} />
-      <Tab.Screen name="Messages" component={AdvisorChatListScreen} />
+      <Tab.Screen name="Dashboard" children={() => <FadeScreen><AdvisorDashboardScreen /></FadeScreen>} />
+      <Tab.Screen name="Clients" children={() => <FadeScreen><CustomersScreen /></FadeScreen>} />
+      <Tab.Screen name="Activity" children={() => <FadeScreen><ActivityScreen /></FadeScreen>} />
+      <Tab.Screen name="Messages" children={() => <FadeScreen><AdvisorChatListScreen /></FadeScreen>} />
     </Tab.Navigator>
   );
 };
@@ -172,8 +188,8 @@ const AppNavigator = () => {
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         transitionSpec: {
-          open: { animation: 'timing', config: { duration: 400 } },
-          close: { animation: 'timing', config: { duration: 350 } },
+          open: { animation: 'timing', config: { duration: 300 } },
+          close: { animation: 'timing', config: { duration: 250 } },
         },
       }}
       initialRouteName={getInitialRoute()}
@@ -197,6 +213,8 @@ const AppNavigator = () => {
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Notifications" component={NotificationsScreen} />
       <Stack.Screen name="StyleQuiz" component={StyleQuizScreen} />
+
+      <Stack.Screen name="BrandCatalog" component={CatalogScreen} />
 
       {/* Advisor Flow */}
       <Stack.Screen name="AdvisorTabs" component={AdvisorTabs} />
